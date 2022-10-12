@@ -4,7 +4,7 @@ This is a slightly watered down version compared to the one me and some people m
 I'm also making this public cause nobody I've given it too has propertly bug tested it
 
 # Prerequisites
-1) models exported with [minmode's PMX noesis script](https://www.deviantart.com/minmode/art/Update-1-6-Noesis-PMX-VMD-export-809252773)
+1) Models exported with [minmode's PMX noesis script](https://www.deviantart.com/minmode/art/Update-1-6-Noesis-PMX-VMD-export-809252773)
 
 Both games are easily accessible so there should be little to no problems with getting files
 
