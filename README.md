@@ -1,6 +1,8 @@
 # NOTICE
 This is a slightly watered down version compared to the one me and some people might have
 
+but otherwise this is the same shader 
+
 I'm also making this public cause nobody I've given it too has propertly bug tested it
 
 # Prerequisites
