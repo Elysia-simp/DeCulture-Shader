@@ -154,6 +154,29 @@ technique model_SS_tech <string MMDPASS = "object_ss"; >
     }
 }
 
+technique model_tech <string MMDPASS = "object"; >
+{
+    pass main
+    {
+        cullmode = ccw;
+        AlphaBlendEnable = TRUE; 
+        #ifdef additive
+        SrcBlend = SrcColor;
+        DestBlend = ONE;
+        #endif
+        VertexShader = compile vs_3_0 vs_model();
+        PixelShader = compile ps_3_0 ps_model();
+
+    }
+    pass edge
+    {
+        cullmode = cw;
+        AlphaBlendEnable = TRUE; 
+        VertexShader = compile vs_3_0 vs_edge();
+        PixelShader = compile ps_3_0 ps_edge();
+    }
+}
+
 technique tech_edge < string MMDPass = "edge"; >
 {
 }
