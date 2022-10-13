@@ -153,3 +153,7 @@ technique model_SS_tech <string MMDPASS = "object_ss"; >
         PixelShader = compile ps_3_0 ps_edge();
     }
 }
+
+technique tech_edge < string MMDPass = "edge"; >
+{
+}
