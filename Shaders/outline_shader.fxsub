@@ -1,0 +1,52 @@
+struct edge_in
+{
+    float4 pos          : POSITION;
+    float3 normal       : NORMAL; // they actually don't have tangents anyways, other shader types do though but not for outlines
+    float2 uv            : TEXCOORD0;
+    float4 uv2            : TEXCOORD1;
+    float4 vertexcolor   : TEXCOORD2; 
+};
+
+
+struct edge_out
+{
+    float4 pos          : POSITION;
+    float4 uv           : TEXCOORD0;
+
+};
+
+
+edge_out vs_edge ( edge_in i)
+{
+    edge_out o = (edge_out)0;
+
+    float4 p = mul(float4(i.pos.xyz, 1.0), mmd_wvp);
+    float4 n = mul(float4(i.normal, 0.0), mmd_wvp);
+
+    n.xy *= rsqrt(dot(n, n));
+
+    float t = i.vertexcolor.x * _EdgeThickness * 0.00285000005;
+    float s = clamp(p.z * 0.1, 0.5, 1.0);
+
+    p.xy += n.xy * t * s;
+
+    o.pos = p;
+    o.uv = float4(i.uv, i.uv2.xy);
+    return o;
+}
+
+float4 ps_edge(edge_out i, float vface : VFACE) : COLOR0
+{
+    float4 uv = i.uv;;
+    float4 color = 1;
+    float3 diffuse = tex2D(diffuseSampler, uv);
+
+    color.xyz = (diffuse * diffuse) * _EdgeBrightness;
+    float3 Diva_col = 1;
+
+    if(ControllerCheck){
+        Diva_col = float3(diva_colorX, diva_colorY, diva_colorZ);
+    }
+    color.xyz *= Diva_col;
+    return color * egColor;
+}

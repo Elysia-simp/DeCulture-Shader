@@ -1,0 +1,27 @@
+float blush_slider : CONTROLOBJECT < string name = "(self)"; string item = "Æ‚ê"; >;
+float4x4 Head_bone : CONTROLOBJECT < string name = "(self)"; string item = "“ª"; >;
+float4x4 Eye_bone : CONTROLOBJECT < string name = "(self)"; string item = "—¼–Ú"; >;
+
+bool ControllerCheck : CONTROLOBJECT < string name = "Controller.pmx"; >;
+float diva_colorX : CONTROLOBJECT < string name = "Controller.pmx"; string item = "diva_colorX"; >; 
+float diva_colorY : CONTROLOBJECT < string name = "Controller.pmx"; string item = "diva_colorY"; >; 
+float diva_colorZ : CONTROLOBJECT < string name = "Controller.pmx"; string item = "diva_colorZ"; >; 
+float diva_rim_colorX : CONTROLOBJECT < string name = "Controller.pmx"; string item = "diva_rim_colorX"; >; 
+float diva_rim_colorY : CONTROLOBJECT < string name = "Controller.pmx"; string item = "diva_rim_colorY"; >; 
+float diva_rim_colorZ : CONTROLOBJECT < string name = "Controller.pmx"; string item = "diva_rim_colorZ"; >; 
+float diva_rim_power : CONTROLOBJECT < string name = "Controller.pmx"; string item = "diva_rim_power"; >; 
+float light_aX : CONTROLOBJECT < string name = "Controller.pmx"; string item = "light_aX"; >; 
+float light_aY : CONTROLOBJECT < string name = "Controller.pmx"; string item = "light_aY"; >; 
+float light_aZ : CONTROLOBJECT < string name = "Controller.pmx"; string item = "light_aZ"; >; 
+float light_bX : CONTROLOBJECT < string name = "Controller.pmx"; string item = "light_bX"; >; 
+float light_bY : CONTROLOBJECT < string name = "Controller.pmx"; string item = "light_bY"; >; 
+float light_bZ : CONTROLOBJECT < string name = "Controller.pmx"; string item = "light_bZ"; >; 
+float light_cX : CONTROLOBJECT < string name = "Controller.pmx"; string item = "light_cX"; >; 
+float light_cY : CONTROLOBJECT < string name = "Controller.pmx"; string item = "light_cY"; >; 
+float light_cZ : CONTROLOBJECT < string name = "Controller.pmx"; string item = "light_cZ"; >; 
+float shadow_colorX : CONTROLOBJECT < string name = "Controller.pmx"; string item = "shadow_colorX"; >; 
+float shadow_colorY : CONTROLOBJECT < string name = "Controller.pmx"; string item = "shadow_colorY"; >; 
+float shadow_colorZ : CONTROLOBJECT < string name = "Controller.pmx"; string item = "shadow_colorZ"; >; 
+float stage_colorX : CONTROLOBJECT < string name = "Controller.pmx"; string item = "stage_colorX"; >; 
+float stage_colorY : CONTROLOBJECT < string name = "Controller.pmx"; string item = "stage_colorY"; >; 
+float stage_colorZ : CONTROLOBJECT < string name = "Controller.pmx"; string item = "stage_colorZ"; >; 

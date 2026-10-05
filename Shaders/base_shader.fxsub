@@ -1,0 +1,113 @@
+//includes
+#include <includes/controller.fxh>
+#include <header/header.fxh>
+#include <Shaders/base_tex.fxh>
+#ifndef DisableOutline
+    #include <Shaders/outline_shader.fxsub>
+#endif
+//
+
+//base structure
+struct vs_in
+{
+    float4 pos          : POSITION;
+    float3 normal       : NORMAL;
+    float2 uv            : TEXCOORD0;
+    float4 vertexcolor   : TEXCOORD2; 
+};
+
+
+struct vs_out
+{
+    float4 pos          : POSITION;
+    float2 uv           : TEXCOORD0;
+    float4 vertex       : TEXCOORD1;
+    float3 normal       : TEXCOORD2;
+    float3 view         : TEXCOORD3;
+    float4 ppos         : TEXCOORD4; //hgshadow stuff idk if anything else uses ppos
+};
+
+vs_out vs_model ( vs_in i)
+{
+    vs_out o = (vs_out)0; //you're not mentally sane if you write this as INPUT/OUTPUT
+    o.pos = mul(i.pos, mmd_wvp);
+    o.uv = i.uv;
+	o.normal = mul((float3x3) mmd_world, i.normal);
+    o.view = mmd_cameraPosition - mul(i.pos.xyz, (float3x3)mmd_world);
+    o.ppos = o.pos;
+    return o;
+}
+
+float4 ps_model(vs_out i, float vface : VFACE) : COLOR0
+{
+
+    float2 uv = i.uv + (time * UVDir);
+    float3 normal = normalize(i.normal);
+    float3 view = normalize(i.view);
+
+    float4 color = egColor;
+    float4 diffuse = tex2D(diffuseSampler, uv);
+    float alpha = tex2D(maskSampler, uv);
+    color.rgb *= diffuse;
+
+    float rimpower = 1;
+    float3 Diva_col = 1;
+    float3 rim_col = 1;
+    float3 lighta_col = 1;
+    float3 lightb_col = 1;
+    float3 lightc_col = 1;
+    float3 shadow_col = 1;
+    float3 stage_col = 1;
+
+    if(ControllerCheck){
+        rimpower = diva_rim_power;
+        Diva_col = float3(diva_colorX, diva_colorY, diva_colorZ);
+        rim_col = float3(diva_rim_colorX, diva_rim_colorY, diva_rim_colorZ);
+        lighta_col = float3(light_aX, light_aY, light_aZ);
+        lightb_col = float3(light_bX, light_bY, light_bZ);
+        lightc_col = float3(light_cX, light_cY, light_cZ);
+        shadow_col = float3(shadow_colorX, shadow_colorY, shadow_colorZ);
+        stage_col = float3(stage_colorX, stage_colorY, stage_colorZ);
+    }
+
+    float rimmask = tex2D(spSampler, uv).x;
+    float ndotv = min(max(1.0f - dot(normal, view), 0.0199999996), 0.980000019);
+    float2 rimuv = float2(ndotv, 0.5f);
+    float3 rim = tex2D(spSampler, rimuv).y * rimpower * rim_col * rimmask;
+    if(NoLight != 1)
+        color.xyz *= Diva_col;
+    color.xyz += rim;
+    color.xyz = saturate(color.xyz);
+    color.w = alpha;
+    return color;
+}
+
+technique model_SS_tech <string MMDPASS = "object_ss"; >
+{
+    pass main
+    {
+        VertexShader = compile vs_3_0 vs_model();
+        PixelShader = compile ps_3_0 ps_model();
+    }
+    #ifndef DisableOutline
+        pass edge
+        {
+            cullmode = cw;
+            VertexShader = compile vs_3_0 vs_edge();
+            PixelShader = compile ps_3_0 ps_edge();
+        }
+    #endif
+}
+
+technique model_tech <string MMDPASS = "object"; >
+{
+    pass main
+    {
+        VertexShader = compile vs_3_0 vs_model();
+        PixelShader = compile ps_3_0 ps_model();
+    }
+}
+
+
+technique edge <string MMDPASS = "edge";>{} //FUCK your pmx settings
+technique shadow <string MMDPASS = "shadow";>{}

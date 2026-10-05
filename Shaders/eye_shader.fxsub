@@ -1,0 +1,105 @@
+//includes
+#include <includes/controller.fxh>
+#include <header/header.fxh>
+#include <Shaders/base_tex.fxh>
+//
+
+//base structure
+struct vs_in
+{
+    float4 pos          : POSITION;
+    float3 normal       : NORMAL;
+    float2 uv            : TEXCOORD0;
+    float4 vertexcolor   : TEXCOORD2; 
+};
+
+
+struct vs_out
+{
+    float4 pos          : POSITION;
+    float2 uv           : TEXCOORD0;
+    float4 vertex       : TEXCOORD1;
+    float3 normal       : TEXCOORD2;
+    float3 view         : TEXCOORD3;
+    float4 ppos         : TEXCOORD4; //hgshadow stuff idk if anything else uses ppos
+};
+
+vs_out vs_model ( vs_in i)
+{
+    vs_out o = (vs_out)0; //you're not mentally sane if you write this as INPUT/OUTPUT
+    o.pos = mul(i.pos, mmd_wvp);
+    o.uv = i.uv;
+	o.normal = mul((float3x3) mmd_world, i.normal);
+    o.view = mmd_cameraPosition - mul(i.pos.xyz, (float3x3)mmd_world);
+    o.ppos = o.pos;
+    return o;
+}
+
+float4 ps_model(vs_out i, float vface : VFACE) : COLOR0
+{
+    float3x3 HeadRot3x3 = (float3x3)Head_bone;
+    float3x3 EyeRot3x3  = (float3x3)Eye_bone;
+
+    float3x3 HeadRotInv = transpose(HeadRot3x3);
+    float3x3 EyeLocalRot = mul(EyeRot3x3, HeadRotInv);
+
+    float3 eyeForward = EyeLocalRot._31_32_33;
+
+    float2 uv = i.uv +  float2(eyeForward.x, -eyeForward.y) * 0.65; // you could use look_v and look_u directly, i just converted uv stuff to bone for stupid ass mmders
+    float3 normal = normalize(i.normal);
+    float3 view = normalize(i.view);
+
+    float4 color = egColor;
+    float4 diffuse = tex2D(diffuseSampler, uv);
+    float alpha = tex2D(maskSampler, uv);
+    color.rgb *= diffuse;
+
+    float rimpower = 1;
+    float3 Diva_col = 1;
+    float3 rim_col = 1;
+    float3 lighta_col = 1;
+    float3 lightb_col = 1;
+    float3 lightc_col = 1;
+    float3 shadow_col = 1;
+    float3 stage_col = 1;
+
+    if(ControllerCheck){
+        rimpower = diva_rim_power;
+        Diva_col = float3(diva_colorX, diva_colorY, diva_colorZ);
+        rim_col = float3(diva_rim_colorX, diva_rim_colorY, diva_rim_colorZ);
+        lighta_col = float3(light_aX, light_aY, light_aZ);
+        lightb_col = float3(light_bX, light_bY, light_bZ);
+        lightc_col = float3(light_cX, light_cY, light_cZ);
+        shadow_col = float3(shadow_colorX, shadow_colorY, shadow_colorZ);
+        stage_col = float3(stage_colorX, stage_colorY, stage_colorZ);
+    }
+
+
+
+    color.xyz *= Diva_col;
+    color.xyz = saturate(color.xyz);
+    color.w = alpha;
+    return color;
+}
+
+technique model_SS_tech <string MMDPASS = "object_ss"; >
+{
+    pass main
+    {
+        VertexShader = compile vs_3_0 vs_model();
+        PixelShader = compile ps_3_0 ps_model();
+    }
+}
+
+technique model_tech <string MMDPASS = "object"; >
+{
+    pass main
+    {
+        VertexShader = compile vs_3_0 vs_model();
+        PixelShader = compile ps_3_0 ps_model();
+    }
+}
+
+
+technique edge <string MMDPASS = "edge";>{} //FUCK your pmx settings
+technique shadow <string MMDPASS = "shadow";>{}

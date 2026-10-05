@@ -1,10 +1,3 @@
-# NOTICE
-This is a slightly watered down version compared to the one me and some people might have
-
-but otherwise this is the same shader 
-
-I'm also making this public cause nobody I've given it too has propertly bug tested it
-
 # Prerequisites
 1) Models exported with [minmode's PMX noesis script](https://www.deviantart.com/minmode/art/Update-1-6-Noesis-PMX-VMD-export-809252773)
 
@@ -12,14 +5,12 @@ Both games are easily accessible so there should be little to no problems with g
 
 # PLEASE READ
 
-this shader is pretty much self explanatory to my [unity shader](https://github.com/GalacticFairy/Uta-Macross-Shader)
-
-Sampler goes into Sph slot
+_SP goes into Sph slot
 and AlphaMask (if any) goes into Toon
 
 MMD already sets these as black and white (respectively) so no worries about not having one or the other in a slot
 
-then just make a "eye_right" and "eye_down" morph and a "Blush" morph if you're using ripped motions with ripped facials(or if you actually want to be able to move the eyes)
+Make sure 両目 exists somewhere in the model and is parented correctly to the head bone.
 
 # RULES
 
