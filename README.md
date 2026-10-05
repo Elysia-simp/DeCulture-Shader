@@ -12,6 +12,10 @@ MMD already sets these as black and white (respectively) so no worries about not
 
 Make sure 両目 exists somewhere in the model and is parented correctly to the head bone.
 
+FxGen is here to help you with setting up your .fx files automatically (or as automatically as possible)
+
+Copy your material folder (please enable material export in whatever asset studio you use) to the same dir as FxGen
+
 # RULES
 
 1) Please credit me for the shader work
