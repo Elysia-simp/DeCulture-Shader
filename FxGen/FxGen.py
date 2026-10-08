@@ -17,14 +17,15 @@ def generate_defines(json_data, name):
         texenvs = json_data.get("m_SavedProperties", {}).get("m_TexEnvs", {})
         shader = json_data.get("m_Shader", "")["m_PathID"]
         print(shader)
-        if shader == -5456259551927882286 or "cheek" in name.lower():
+        if shader == -5456259551927882286 or "cheek" in name.lower() or shader == 9103776667637537722:
             f.writelines("#define DisableOutline\n")
             
         if shader == 4382356676065627482 or shader == 7557468678838382648:
             f.writelines("#define NoLight 1\n")
         else:
             f.writelines("#define NoLight 0\n")
-
+        if shader == 9103776667637537722:
+            f.writelines("#define Additive\n")
 
 
         for key, value in floats.items():

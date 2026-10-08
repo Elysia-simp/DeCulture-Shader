@@ -21,7 +21,7 @@ struct vs_out
 {
     float4 pos          : POSITION;
     float2 uv           : TEXCOORD0;
-    float4 vertex       : TEXCOORD1;
+    float4 vertexcol       : TEXCOORD1;
     float3 normal       : TEXCOORD2;
     float3 view         : TEXCOORD3;
     float4 ppos         : TEXCOORD4; //hgshadow stuff idk if anything else uses ppos
@@ -35,6 +35,7 @@ vs_out vs_model ( vs_in i)
 	o.normal = mul((float3x3) mmd_world, i.normal);
     o.view = mmd_cameraPosition - mul(i.pos.xyz, (float3x3)mmd_world);
     o.ppos = o.pos;
+    o.vertexcol = i.vertexcolor;
     return o;
 }
 
@@ -76,7 +77,14 @@ float4 ps_model(vs_out i, float vface : VFACE) : COLOR0
     float3 rim = tex2D(spSampler, rimuv).y * rimpower * rim_col * rimmask;
     if(NoLight != 1)
         color.xyz *= Diva_col;
-    color.xyz += rim;
+    
+    #ifndef Additive
+        color.xyz += rim;
+    #else
+        color.xyz *= i.vertexcol.xyz;
+        color.xyz *= _Power;
+
+    #endif
     color.xyz = saturate(color.xyz);
     color.w = alpha;
     return color;
@@ -86,6 +94,10 @@ technique model_SS_tech <string MMDPASS = "object_ss"; >
 {
     pass main
     {
+        #ifdef Additive
+            SrcBlend = one;
+            DestBlend = one;
+        #endif
         VertexShader = compile vs_3_0 vs_model();
         PixelShader = compile ps_3_0 ps_model();
     }
