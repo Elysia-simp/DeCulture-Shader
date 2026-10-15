@@ -15,8 +15,8 @@ def generate_defines(json_data, name):
         floats = json_data.get("m_SavedProperties", {}).get("m_Floats", {})
         colors = json_data.get("m_SavedProperties", {}).get("m_Colors", {})
         texenvs = json_data.get("m_SavedProperties", {}).get("m_TexEnvs", {})
-        shader = json_data.get("m_Shader", "")["m_PathID"]
-        print(shader)
+        shader = json_data.get("m_Shader", {}).get("m_PathID", "dumbass")
+        folder = name.replace(".json", "")
         if shader == -5456259551927882286 or "cheek" in name.lower() or shader == 9103776667637537722:
             f.writelines("#define DisableOutline\n")
             
@@ -34,7 +34,6 @@ def generate_defines(json_data, name):
         for key, val in colors.items():
             r, g, b, a = val["r"], val["g"], val["b"], val["a"]
             f.writelines(f"#define {key} float4({r}f, {g}f, {b}f, {a}f)\n")
-
 
 
         if "eye" in name.lower():

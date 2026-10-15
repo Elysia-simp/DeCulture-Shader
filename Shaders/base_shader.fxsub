@@ -3,7 +3,9 @@
 #include <header/header.fxh>
 #include <Shaders/base_tex.fxh>
 #ifndef DisableOutline
-    #include <Shaders/outline_shader.fxsub>
+    #ifdef _EdgeThickness
+        #include <Shaders/outline_shader.fxsub>
+    #endif
 #endif
 //
 
@@ -51,7 +53,7 @@ float4 ps_model(vs_out i, float vface : VFACE) : COLOR0
     float alpha = tex2D(maskSampler, uv);
     color.rgb *= diffuse;
 
-    float rimpower = 1;
+    float rimpower = 0.5f;
     float3 Diva_col = 1;
     float3 rim_col = 1;
     float3 lighta_col = 1;
@@ -102,12 +104,14 @@ technique model_SS_tech <string MMDPASS = "object_ss"; >
         PixelShader = compile ps_3_0 ps_model();
     }
     #ifndef DisableOutline
-        pass edge
-        {
-            cullmode = cw;
-            VertexShader = compile vs_3_0 vs_edge();
-            PixelShader = compile ps_3_0 ps_edge();
-        }
+        #ifdef _EdgeThickness
+            pass edge
+            {
+                cullmode = cw;
+                VertexShader = compile vs_3_0 vs_edge();
+                PixelShader = compile ps_3_0 ps_edge();
+            }
+        #endif
     #endif
 }
 
