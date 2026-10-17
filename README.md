@@ -1,5 +1,9 @@
+# DISCLAIMER
+
+Using this project with AI is prohibited.
+
 # Prerequisites
-1) Models exported with [minmode's PMX noesis script](https://www.deviantart.com/minmode/art/Update-1-6-Noesis-PMX-VMD-export-809252773)
+1) Models exported with [minmode's PMX noesis script](https://github.com/h-kidd/noesis-pmx)
 
 Both games are easily accessible so there should be little to no problems with getting files
 
